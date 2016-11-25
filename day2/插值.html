@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>数据绑定语法之插值</title>
+	</head>
+	<body>
+		<p>Vue.js的模版是基于DOM实现的，就是说
+			所有的Vue.js模版都是可解析的有效的HTML，且通过一些特殊的特性做了增强。
+			Vue模板因此从根本上不同于基于字符串的模板
+		</p>
+		<span>Message:{{msg}}</span> 
+		<br>
+		<span>This will never change:{{*msg}}</span> 
+		<!-- 双Mustache标签将数据解析为纯文本而不是html
+			为了输出真的HTML字符串，要使用三Mustache标签
+			 -->
+		<div>{{{raw_html}}}</div>
+		<!-- Mustache标签也可以用在HTML的Attribute中 -->
+		<div id='item-{{ id }}'></div>
+		<!-- 过滤器 -->
+		<span>{{message | uppercase }}</span>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var data = {
+			msg:'one',
+			id:'dd',
+			raw_html:'htmlll',
+			message:"AbCdEfGh"
+		}
+		var vm = new Vue({
+			el:'body',
+			data:data
+		});
+		vm.$el.onclick = function(){
+			data.msg = 'two'
+		}
+	</script>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>属性和方法</title>
+	</head>
+	<body>
+		<div id="example"></div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var data = {a:1};
+		var vm = new Vue({
+			data:data
+		})
+		console.log(vm.a === data.a); //true
+
+		// 设置属性也会影响到原始数据
+		vm.a = 3;
+		console.log(data.a); //3
+
+		// 反之亦然
+		data.a = 5;
+		console.log(vm.a); //5
+
+
+		// 以下是我的想法
+		var aa = {
+			a:3
+		};
+		var bb = aa;
+		aa = bb;
+		console.log(aa === bb);
+
+		aa.a = 5;
+		console.log(bb.a);
+
+		bb.a = 7;
+		console.log(aa.a);
+
+		// 接上
+		// 只有被代理的属性是响应的，如果实例创建之后添加新的属性到实例上，不会触发视图更新
+		// 还有一些实例属性和方法，前缀为$，以便与代理的数据属性区分
+
+		var data1 = {a:1};
+		var vm1 = new Vue({
+			el:'#example',
+			data:data1
+		})
+		console.log(vm1.$data === data1);
+		console.log(vm1.$el);
+		console.log(vm1.$el === document.getElementById('example'));
+
+		// $watch 是一个实例方法
+		vm1.$watch('a',function(newVal,oldVal){
+			//这个回调函数在vm1.a 改变后调用
+			console.log('wcao');
+		})
+		data1.a = 13;
+
+		// 实例生命周期
+		var vm2 = new Vue({
+			data:{
+				a:3
+			},
+			created:function(){
+				// this指向vm2实例
+				console.log('a is '+this.a);
+				//  !!!! 
+			}
+		})
+
+		// 1.有趣的地方
+		//    vm2这个Vue实例的created对象的方法自执行了
+		// 2.而且这个created对象的方法比上面的vm1.$watch还先执行。。什么鬼
+		// Vue实例在创建时有一系列初始化步骤
+			// 需要建立 数据观察，编译模版，创建必要的数据绑定
+			// 在此过程中，它将调用一些生命周期钩子，给自定义逻辑提供运行机会
+			// 例如 created 钩子会在实例创建后调用
+		// 还有其它 的钩子  compiled ready destroyed
+		// 钩子的this指向调用ta的Vue实例 
+	</script>
+</html>

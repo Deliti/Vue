@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>vue渲染列表</title>
+	</head>
+	<body>
+		<div id="app">
+			<ul>
+				<li v-for='todo in todos'>
+					{{todo.text}}
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src='js/vue.js'></script>
+	<script>
+		new Vue({
+			el:'#app',
+			data:{
+				todos:[
+					{text:'learn javascript'},
+					{text:'learn vue.js'},
+					{text:'build something awesome'}
+				]
+			}
+		})
+	</script>
+	<!-- 
+	1.v-for 指令用于显示数组元素
+	 -->
+</html>

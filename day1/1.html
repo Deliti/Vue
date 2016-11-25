@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>vue.js</title>
+	</head>
+	<body>
+	<!-- 这是我们的view层 -->
+		<div id="app">
+			{{msg}}
+		</div>
+	</body>
+	<script src='js/vue.js'></script>
+	<script>
+		new Vue({
+			el:'#app',
+			// 这是我们的Model
+			data:{
+				msg:'hello vue.js'
+			}
+		})
+	</script>
+</html>

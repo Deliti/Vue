@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>处理用户输入 </title>
+	</head>
+	<body>
+		<div id="app">
+			<p>{{msg}}</p>
+			<button v-on:click='reverseMsg'>Reverse Message</button>
+		</div>
+	</body>
+	<script src='js/vue.js'></script>
+	<script>
+		new Vue({
+			el:'#app',
+			data:{
+				msg:'一二三四三二二'
+			},
+			methods:{
+				reverseMsg:function(){
+					this.msg = this.msg.split('').reverse().join('');
+				}
+			}
+		})
+	</script>
+</html>

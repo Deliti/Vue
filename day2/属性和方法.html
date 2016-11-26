@@ -23,6 +23,11 @@
 		data.a = 5;
 		console.log(vm.a); //5
 
+		data.b = 4;
+		console.log(vm.b);  //undefined
+
+		vm.c = 5;
+		console.log(data.c);  //undefined
 
 		// 以下是我的想法
 		var aa = {
@@ -37,11 +42,8 @@
 
 		bb.a = 7;
 		console.log(aa.a);
-
-		// 接上
-		// 只有被代理的属性是响应的，如果实例创建之后添加新的属性到实例上，不会触发视图更新
-		// 还有一些实例属性和方法，前缀为$，以便与代理的数据属性区分
-
+		//
+		
 		var data1 = {a:1};
 		var vm1 = new Vue({
 			el:'#example',

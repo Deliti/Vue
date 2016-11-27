@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>计算setter</title>
+	</head>
+	<body>
+		<div id="demo">
+			{{fullName}}
+		</div>
+
+		<div id="exp">
+			{{exp}}
+		</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var vm = new Vue({
+			el:'#demo',
+			data:{
+				firstName:'foo',
+				lastName:'bar'
+			},
+			computed:{
+				fullName:{
+					get:function(){
+						// getter
+						return this.firstName+' '+this.lastName;
+					},
+					// setter
+					set:function(newValue){
+						var names = newValue.split(' ');
+						this.firstName = names[0];
+						this.lastName = names[names.length-1]
+					}
+				}
+			}
+		})
+
+		// 计算属性默认值是getter，在需要的时候也可以提供一个setter
+		// 现在调用vm.fullName = 'John Doe'时，setter会被调用
+		vm.fullName = 'John Doe';
+		console.log(vm.firstName+'.'+vm.lastName); 
+
+		// 计算属性的奥秘
+		// 计算属性computed不是简单的getter，计算属性会持续追踪它的响应依赖、
+		// 在计算一个计算属性的时候，Vue.js会更新它的依赖列表并缓存结果，只有当一个响应依赖发生改变的时候，缓存的结果才无效
+		// 因此，只要依赖不变化，访问计算属性会直接调用缓存结果，而不是调用getter
+
+		// forEXP
+		var vm2 = new Vue({
+			el:'#exp',
+			data:{
+				msg:'hi'
+			},
+			computed:{
+				exp:{
+					cache:false,
+					get:function(){
+						return Date.now()+this.msg
+					}
+				}
+					
+			}
+		})
+
+		console.log(vm2.exp);  //1479914237544hi
+		setTimeout(function(){
+			console.log(vm2.exp);  //1479914237544hi
+			setTimeout(function(){
+				vm2.msg = 'hello';
+				console.log(vm2.exp); //1479914238549hello
+			})
+		},1000)
+
+		// 所以只要依赖列表没有修改，计算属性的值就不会修改
+		// 这个例子的计算属性依赖只有msg，date与Vue数据观察系统无关
+
+		// 有时希望getter不改变原有的行为，每次访问都调用getter
+		// 就是给指定的计算属性关闭缓存 cache:false 即可
+
+		// 但是！只是在js中访问是这样的，数据绑定依然依赖与驱动的
+		// 如果是在模块中这样绑定计算属性{{exp}}，同样是依赖发生变化时才会更新dom
+	</script>
+</html>

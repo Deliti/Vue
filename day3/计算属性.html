@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>计算属性</title>
+	</head>
+	<body>
+		<div id="exp">
+			a={{a}},b={{b}}
+		</div>
+
+		<!-- computed vs $watch -->
+		<div id='expt'>
+			{{fullName}}
+		</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var vm = new Vue({
+			el:'#exp',
+			data:{
+				a:1
+			},
+			computed:{
+				// 一个计算属性的getter
+				b:function(){
+					// this指向vm实例
+					return this.a+1
+				}
+			}
+		})
+
+		console.log(vm.b); //2
+		vm.a = 2;
+		console.log(vm.b); //3
+
+		// vm.b的值始终取决于vm.a的值
+		// vm.b依赖于vm.a，当vm.a发生改变时，依赖与vm.b的绑定也会更新
+
+		// 计算属性computed vs $watch
+		// $watch 用于观察Vue实例上的数据变动
+		// 当一些数据需要根据其它数据变化时，$watch很好
+		// 但是通常更好的办法是使用computed而不是用$watch毁掉
+		
+		var vm2 = new Vue({
+			el:'#expt',
+			data:{
+				firstName:'foo',
+				lastName:'bar',
+				fullName:'foo bar'
+			},
+			computed:{
+				fullName:function(){
+					console.log('Time2:'+new Date().getTime());
+					return this.firstName+' '+this.lastName;
+				}
+			}
+
+		})
+
+		// vm2.$watch('firstName',function(val){
+		// 	console.log( 'Time2:'+new Date().getTime());
+		// 	this.fullName = val+' '+this.lastName;
+		// })
+
+		// vm2.$watch('lastName',function(val){
+		// 	this.fullName = this.firstName+' '+val;
+		// })
+
+		vm2.firstName = 'haha';
+		console.log( 'Time1:'+new Date().getTime());
+
+		// 从结构来看，computed计算属性的方式更简单
+		// 从效率来看，computed可i算属性的时间更稳定
+	</script>
+</html>

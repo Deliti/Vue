@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Class与Style绑定</title>
+	</head>
+	<body>
+		
+		<!-- 对象语法 -->
+		<!-- 我们可以传给`v-bind:class`一个对象，以动态地切换class。##注意：v-bind:class 指令可以和普通的class特性共存-->
+		<div class="static" v-bind:class="{
+			'class-a':isA,
+			'class-b':isB
+		}"></div>
+		<!-- 也可以直接绑定数据中的一个对象 -->
+		<div id="app" v-bind:class="classObj" v-bind:class='class-c'></div>
+
+		<div id="app2" v-bind:class="classObj"></div>
+
+		<!-- 数组语法 -->
+		<div id="app4" v-bind:class="[classA,classB]"></div>
+		<!-- 三元表达式 -->
+		<div id="app5" v-bind:class="[classA,isB?classB:'']"></div>
+
+		<!-- 绑定内联样式 -->
+		<!-- css属性名可以是camelCase也可以是kebab-case -->
+		<div id="app6" v-bind:style={color:activeColor,fontSize:fontSize+'px'}>{{word}}</div>
+
+		<!-- 直接绑定一个样式对象通常更好，模板更清晰 -->
+		<div id="app7" v-bind:style="styleObj" v-bind:class='classObj'>{{parse}}</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var data = {
+			isA:true,
+			isB:false
+		}
+		var vm = new Vue({
+			el:'.static',
+			data:data
+		})
+		data.isB = true
+
+		var vm2 = new Vue({
+			el:'#app',
+			data:{
+				classObj:{
+					'class-a':true,
+					'class-b':false
+				}
+			}
+		})
+
+		// 文档在这后面有句话：我们也可以在这里绑定一个返回对象的计算属性，这是一个常用且强大的模式
+		// 尝试了用之前的computed属性去写，发现应该是姿势不对，查询资料发现这种写法
+		var vm3 = new Vue({
+			el:'#app2',
+			data:{
+				a:1
+			},
+			computed:{
+				'classObj':function(){
+					if(this.a == 1){
+						return {
+							'class-a':true,
+							'class-b':false
+						}
+					}else{
+						return {
+							'class-a':false,
+							'class-b':true
+						}
+					}
+				}
+			}
+		})
+		// #app2 class: class-a
+		vm3.a = 4;  //#app2 class: class-b
+
+		// 数组语法
+		var vm4 = new Vue({
+			el:'#app4',
+			data:{
+				classA:'class-a',
+				classB:'class-b'
+			}
+		})
+
+		//三元表达式 
+		var vm5 = new Vue({
+			el:'#app5',
+			data:{
+				classA:'class-a',
+				classB:'class-b',
+				isB:false
+			}
+		}) //#app5 class: class-a
+		vm5.isB = true;
+
+		// 不过当有多个条件class时这样写就有些繁琐
+		// 在1.0.19+中，可以在数组语法中使用对象语法
+		// <div v-bind:class="[classA,{classB:isB,classC:isC}]"></div>
+
+		// 绑定style
+		var vm6 = new Vue({
+			el:'#app6',
+			data:{
+				activeColor:'red',
+				fontSize:20,
+				word:'我是谁我在哪谁在打我'
+			}
+		})
+
+		// 样式写成对象的形式
+		var vm7 = new Vue({
+			el:'#app7',
+			data:{
+				styleObj:{
+					color:'red',
+					fontSize:'12px'
+				},
+				classObj:{
+					'class-a':true,
+					'class-b':false
+				},
+				parse:'握草这又是一句话'
+			}
+		})
+
+		// 自动添加前缀
+		// 当`v-bind:style`使用需要厂商前缀的CSS属性时，如`transform`,vue会自动侦测并添加相应的前缀
+	</script>
+</html>

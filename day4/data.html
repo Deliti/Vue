@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>数据</title>
+	</head>
+	<body>
+		
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		// var a = {a:1};
+		// var data = a;
+		// var data1 = function(a){
+		// 	return a;
+		// }
+
+		// console.log(data1(a) === data)
+		var data = {
+			a:1
+		}
+		Vue.component('testcom',{
+			data:function(){
+				return {
+					a:1
+				};
+			},
+			template:'<div>haha</div>'
+		})
+
+	</script>
+	<div id="test1">
+		<testcom></testcom>
+	</div>
+	<div id="test2">
+		<testcom></testcom>
+	</div>
+	<script>
+		var vm1 = new Vue({
+			el:'#test1'
+		})
+		var vm2 = new Vue({
+			el:'#test2'
+		})
+		console.log(vm1.a)
+	</script>
+</html>

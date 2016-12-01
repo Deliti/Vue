@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>使用组件</title>
+	</head>
+	<body>
+		<h1>使用组件</h1>
+		<div id='exp'>
+			<my-component></my-component>
+		</div>
+
+		<div id='exp2'>
+			<parentcom></parentcom>
+		</div>
+
+		<div id="exp4">
+			<one-com></one-com>
+		</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		//先创建一个构造器
+		var MyComponent = Vue.extend({
+			template:'<div>A custom component</div>'
+		})
+		// 注册
+		//全局注册的格式为 Vue.component(tag,constructor)
+		Vue.component('my-component',MyComponent);
+
+		//组件只有在注册之后，才可以使用初始化根实例
+		new Vue({
+			el:'#exp'
+		})
+
+		// 局部注册
+		//用实例选项components注册
+		
+		var Child = Vue.extend({
+			template:'<span>局部注册</span>'
+		})
+		var Parent = Vue.extend({
+			template:'<div>我是父组件<childcom></childcom></div>',
+			components:{
+				'childcom':Child
+			}
+		})
+		Vue.component('parentcom',Parent);
+		new Vue({
+			el:'#exp2'
+		})
+
+		var oneCom = Vue.extend({
+			template:'<div>哈哈哈</div>'
+		})
+
+		new Vue({
+			el:'#exp4',
+			components:{
+				'one-com':oneCom
+			}
+		})
+	</script>
+</html>

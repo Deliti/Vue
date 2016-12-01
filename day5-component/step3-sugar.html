@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>组件注册语法糖</title>
+	</head>
+	<body>
+		<div id="app">
+			<my-component1></my-component1>
+		</div>
+		<div id="app2">
+			<my-component2>
+			</my-component2>
+		</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		// 之前的组件注册的方式有些繁琐，Vue.js有语法糖
+		// 使用component直接创建和注册组件
+		
+		Vue.component('my-component1',{
+			template:'<p>我是组件一</p>'
+		})
+		new Vue({
+			el:"#app"
+		})
+
+		var vm2 = new Vue({
+			el:'#app2',
+			components:{
+				'my-component2':{
+					template:'<p>我是局部组件</p>'
+				}
+			}
+		})
+	</script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>组件的el和data选项</title>
+	</head>
+	<body>
+		
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		// 如果在定义组件选项时，这样写，浏览器会提出一个错误
+		// var datas = {
+		// 	a:1
+		// }
+		// Vue.component('my-com',{
+		// 	data:datas
+		// })
+		
+		
+		Vue.component('my-com',{
+			data:function(){
+				return {a:1}
+			},
+			el:function(){
+				return '#app'
+			}
+		})
+	</script>
+</html>

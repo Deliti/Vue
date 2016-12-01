@@ -1,0 +1,64 @@
+<<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="app">
+			Search <input type="text" v-model='searchQuery'>
+			<my-comp :data="dataList" :columns="columnsList" :filter-key='searchQuery'></my-comp>
+		</div>
+		<template id="temp">
+			<table>
+				<thead>
+					<tr>
+						<th v-for='col in columns'>{{col}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for='list in data | filterBy filterKey'>
+						<td v-for='col in columns'>
+							{{list[col]}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		data = {
+			searchQuery:'',
+			columnsList:['id','name'],
+			dataList:[
+				{
+					id:'1222121',
+					name:'name1'
+				},
+				{
+					id:'2222222',
+					name:'name2'
+				},
+				{
+					id:'3333333',
+					name:'name3'
+				}
+			]
+		}
+
+		Vue.component('my-comp',{
+			template:'#temp',
+			props:{
+				data:Array,
+				columns:Array,
+				filterKey:String
+			}
+		})
+
+		new Vue({
+			el:'#app',
+			data:data
+		})
+	</script>
+</html>

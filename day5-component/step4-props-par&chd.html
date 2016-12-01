@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>prop传递数据</title>
+	</head>
+	<body>
+		<div id="app" :my-sex='sex'>
+			<table>
+				<tr>
+					<th>父组件数据</th>
+				</tr>
+				<tr>
+					<td>name</td>
+					<td>{{name}}</td>
+					<td><input type="text" v-model='name'></td>
+				</tr>
+				<tr>
+					<td>age</td>
+					<td>{{age}}</td>
+					<td><input type="text" v-model='age'></td>
+				</tr>
+				<tr>
+					<td>haxi</td>
+					<td>{{haha.xi}}</td>
+					<td><input type="text" v-model='haha.xi'></td>
+				</tr>
+			</table>
+			<my-component :my-age.sync='age' :my-name.once='name' :my-ha='haha'></my-component>
+		</div>
+
+		<template id='temp'>
+			<table>
+				<tr>
+					<th>子组件数据</th>
+				</tr>
+				<tr>
+					<td>name</td>
+					<td>{{myName}}</td>
+					<td><input type="text" v-model='myName'></td>
+				</tr>
+				<tr>
+					<td>age</td>
+					<td>{{myAge}}</td>
+					<td><input type="text" v-model='myAge'></td>
+				</tr>
+				<tr>
+					<td>haxi</td>
+					<td>{{myHa.xi}}</td>
+					<td><input type="text" v-model='myHa.xi'></td>
+				</tr>
+			</table>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				name:'dlt',
+				age:18,
+				sex:'man',
+				haha:{
+					xi:'haxi'
+				}
+			},
+			components:{
+				'my-component':{
+					template:'#temp',
+					props:['myName','myAge','myHa']
+				}
+			}
+		})
+	</script>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>使用props</title>
+	</head>
+	<body>
+		<div id="app">
+			<my-component v-bind:my-name='name' v-bind:my-age='age'></my-component>
+		</div>
+		<template id="myComponent">
+			<ul>
+				<li>子组件数据</li>
+				<li>{{myName}}</li>
+				<li>{{myAge}}</li>
+			</ul>
+		</template>
+		<div id="app2">
+			<two-comp msg='hello'></two-comp>
+		</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				name:'keepfool',
+				age:26
+			},
+			components:{
+				'my-component':{
+					template:'#myComponent',
+					props:['myName','myAge']
+				}
+			}
+		})
+
+		
+		
+		var vm2 = new Vue({
+			el:'#app2',
+			components:{
+				'two-comp':{
+					template:'<p>{{msg}}</p>',
+					props:['msg']
+				}
+			}
+		})
+
+	</script>
+</html>

@@ -92,9 +92,7 @@ parent作写在为父组件，被注册之后可以放在HTML中使用，但是�
 		<childcom></childcom>
 	</div>
 OR
-	<div id='exp3'>
-		
-	</div>
+	<div id='exp3'></div>
 	<parent></parent>
 ```
 

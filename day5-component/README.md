@@ -220,6 +220,7 @@ so，props的值就是我们刚刚设置的自定义attr，为什么要用v-bind
 1.在子组件中定义prop时，使用camelCase命名法，由于HTML特性不区分大小写，camelCase的prop用于特性时，需要转换为kabab-case。例如在prop中定义的myName，在用作特性时需要转换为my-name。
 2.在子组件中定义了props，如props:['name','age']，在组件中就可以直接使用{{name}}，{{age}}。所以props就相当于data。
 
+
 我们再来看一个[props完整例子](step4-props-par&chd.html)
 实现的功能是两个table，数据同步，第一个tabel是Vue实例下的原table，第二个table就是我们做的组件。有以下体会：<br>
 >prop默认为单向绑定：当父组件的属性变化时，将传导给子组件，但是反过来不会。这是防止子组件无意修改了父组件的状态。也可以使用.sync双向绑定，或.once一次绑定。但是如果绑定的状态是数组或对象，不管是父组件还是子组件修改都会修改，因为是引用传递。

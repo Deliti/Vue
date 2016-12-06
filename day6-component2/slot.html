@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>使用Slot</title>
+	</head>
+	<body>
+		<div id="app">
+			<my-comp>
+				<h1>Hello Vue.js</h1>
+			</my-comp>
+			<my-comp></my-comp>
+		</div>
+		<template id="myComponent">
+			<div class="content">
+				<h2>This is a component</h2>
+				<slot>如果没有分发内容，就显示slot中的内容</slot>
+				<p>say something...</p>
+			</div>
+		</template>
+
+		<div id="app2" >
+			<modal-dialog :show.sync='show' :class='dialogClass'>
+				<header class="dialog-header" slot='header'>
+					<h1 class="dialog-title">提示信息</h1>
+				</header>
+				<div class="dialog-body" slot='body'>
+					<p>这是第一句</p>
+					<p>这是第二段</p>
+				</div>
+				<footer class="dialog-footer" slot='footer'>
+					<button class="btn" @click='closeDialog'>关闭</button>
+				</footer>
+			</modal-dialog>
+			<button class='btn btn-open' @click='openDialog'>打开对话框</button>
+		</div>
+		<template id="test2">
+			<div class="dialogs">
+				<div class="dialog">
+					<div class="dialog-content">
+						<div class="close rotate">
+							<span></span>
+						</div>
+						<slot name="header"></slot>
+						<slot name="body"></slot>
+						<slot name="footer"></slot>
+					</div>
+				</div>
+				<div class="dialog-overlay"></div>
+			</div>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		Vue.component('my-comp',{
+				template:'#myComponent'
+			}
+		)
+
+		var vm1 = new Vue({
+			el:'#app'
+		})
+		// 显示出来slot就相当于一个占位符
+		
+		// 上面这个实例是一个匿名的slot。只能表示一个插槽。如果需要多个内容插槽，则可以为slot元素指定name属性
+
+		Vue.component('modal-dialog',{
+			template:'#test2',
+			props:['show'],
+			methods:{
+				close:function(){
+					this.show = false
+				}
+			}
+		})
+
+		var vm2 = new Vue({
+			el:"#app2",
+			data:{
+				show:false,
+				dialogClass:'dialog-info'
+			},
+			methods:{
+				openDialog:function(){
+					this.show = true
+					this.dialogClass = dialogClass
+				},
+				closeDialog:function(){
+					this.show = false
+				}
+			}
+		})
+	</script>
+</html>

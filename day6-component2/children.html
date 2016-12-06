@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>$children示例</title>
+	</head>
+	<body>
+		<div id="app">
+			<parent-comp></parent-comp>
+		</div>
+		<template id="parent-comp">
+			<children1></children1>
+			<children2></children2>
+			<button @click='showChildData'>显示子组件的数据</button>
+		</template>
+		<template id="child1">
+			<h2>这是子组件1</h2>
+			<button @click='showRootData'>显示跟组件</button>
+		</template>
+		<template id="child2">
+			<h2>这是子组件2</h2>
+			<button @click='showParentData'>显示父组件的数据</button>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		Vue.component('parent-comp',{
+			template:'#parent-comp',
+			data:function(){
+				return {
+					msg:'俺是父组件'
+				}
+			},
+			components:{
+				'children1':{
+					template:"#child1",
+					data:function(){
+						return {
+							msg:'childcomp 111'
+						}
+					},
+					methods:{
+						showRootData:function(){
+							console.log(this.$root.msg)
+						}
+					}
+				},
+				'children2':{
+					template:"#child2",
+					data:function(){
+						return {
+							msg:'childcomp 222'
+						}
+					},
+					methods:{
+						showParentData:function(){
+							console.log(this.$parent.msg)
+						}
+					}
+				}
+			},
+			methods:{
+				showChildData:function(){
+					var map = Array.prototype.map;
+					map.call(this.$children,function(i){
+						console.log(i.msg);
+					})
+				}
+			}
+		});
+		var vm1 = new Vue({
+			el:'#app',
+			data:{
+				msg:'俺是根目录'
+			}
+		})
+	</script>
+</html>

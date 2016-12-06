@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<style>
+			.fade-transition{
+				transition:opacity .3s ease;
+			}
+			.fade-enter,.fade-leave{
+				opacity:0
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div>
+				<input type="text" @click='searchAll'>
+			</div>
+			<content-comp 
+				:is='currentComp' keep-alive
+				transition='fade'
+				transition-mode='out-in'
+				></content-comp>
+		</div>
+		<template id="contentcomp">
+			<search-comp :search-cond='opt.condition'></search-comp>
+			<show-comp :table-attr='opt.tableAttr'></show-comp>
+		</template>
+		<template id="searchcomp">
+			<label v-for='col in searchCond'>{{col.label}}</label>
+			<input type="text" v-for='col in searchCond' v-model='searchQuery[col.name]'>
+		</template>
+		<template id="showcomp">
+			<table>
+				<thead>
+					<tr>
+						<th v-for='colname in tableAttr.colNames'>{{colname}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for='row in dataList'>
+						<td v-for='col in tableAttr.colModle'>{{row[col]}}</td>
+						<td>选择</td>
+					</tr>
+				</tbody>
+			</table>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var laso = {};
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				currentComp:'home',
+				fade:{
+
+				}
+			},
+			components:{
+				'home':{
+				template:'#contentcomp',
+				data:function(){
+					return {
+						opt : {
+							"tableAttr" : {
+								"colNames" : [ "ID", "名称", "操作" ],
+								"colModle" : [ "merchantId", "merchantName" ]
+							},
+							"dataFn" : {
+								"cmd" : "reserveMerchantList",
+								"params" : {
+									"vspId" : laso.corpId,
+									"authId" : laso.curDeptId,
+									"orderType" : 3,
+									"userId" : laso.curUserId,
+									"isDirect" : "3",
+									"onePageNum" : 5
+								// 0:其他，1:直属客服部，2:直属理赔部，3：普通客服部
+								},
+								"dataListPath" : "detail.dataList"
+							},
+							"condition" : [ {
+								"label" : "名称1",
+								"name" : "merchantName"
+							} ],
+							"callBackFn" : 'parseCallBack'
+
+						}
+					}
+				},
+				methods:{
+					searchAll:function(){
+						this.$emit('searchalls');
+					}
+				},
+				events:{
+					'searchall':function(){
+						 var obj2 = {
+							"cmd": "reserveMerchantList",
+							"result": 0,
+							"resultNote": "Success",
+							"totalRecordNum": 50,
+							"pages": 5,
+							"pageNo": 0,
+							"detail": {
+								"dataList": [{
+										"merchantId": "5d61121747b84a51a98e823529bdfdea",
+										"merchantName": "测试默认图片微信图"
+									}]
+								}
+						};
+						this.$broadcast('showall',obj2);
+					}
+				},
+				components:{
+					'search-comp':{
+						data:function(){
+							return {
+								searchQuery:{}
+							}
+						},
+						template:'#searchcomp',
+						props:['searchCond'],
+						events:{
+
+						}
+					},
+					'show-comp':{
+						template:'#showcomp',
+						data:function(){
+							return {
+								rowList:[],
+								dataList:[]//返回的数据数组
+							}
+						},
+						props:['tableAttr'],
+						events:{
+							'showall':function(data){
+								this.dataList = data.detail.dataList;
+							}
+						}
+					}
+				}
+			},
+			'test':{
+				template:'<div>小样</div>'
+			}
+			},
+			methods:{
+				searchAll:function(){
+					// this.$broadcast('searchall');
+					this.currentComp = (this.currentComp == 'test')?'home':'test';
+				}
+			},
+			activate:function(){
+
+			}
+		})
+	</script>
+</html>

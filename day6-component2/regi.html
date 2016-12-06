@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆界面</title>
+	</head>
+	<body>
+		<div id="app">
+			<loading>
+				<header slot='header'>
+					这是登陆头
+				</header>
+				<div slot='content'>
+					用户名：<input type="text"><br>
+					密码：<input type="text">
+				</div>
+				<footer slot='footer'></footer>
+			</loading>
+		</div>
+		<template id="load-temp">
+			<div>
+				<slot name='header'></slot>
+				<slot name="content"></slot>
+				<slot name="footer"></slot>
+			</div>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		Vue.component('loading',{
+			template:'#load-temp'
+		})
+		new Vue({
+			el:'#app'
+		})
+	</script>
+</html>

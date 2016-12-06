@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>refs示例</title>
+	</head>
+	<body>
+		<div id="app">
+			<p>当组件个数较多时，我们难以记住各个组件的顺序和位置，通过序号访问子组件不是很方便</p>
+			<p>在子组件上使用v-ref指令，可以给子组件指定一个索引ID</p>
+			<parent-comp></parent-comp>
+		</div>
+		<template id="parent-comp">
+			<child-comp1 v-ref:cc1></child-comp1>
+			<child-comp2 v-ref:cc2 :my-name='name' :my-age='age'></child-comp2>
+			<button @click='showChildData'>显示子组件的数据</button>
+		</template>
+		<template id="child1">
+			<h2>组件1</h2>
+		</template>
+		<template id="child2">
+			<h2>组件2</h2>
+			<p>他现在叫{{myName}},今年{{myAge}}岁</p>
+			<p>我比他大一岁，今年{{myAge+1}}岁</p>
+		</template>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var vm1 = new Vue({
+			el:'#app',
+			components:{
+				'parent-comp':{
+					template:'#parent-comp',
+					data:function(){
+						return {
+							name:'dlt',
+							age:18
+						}
+					},
+					methods:{
+						showChildData:function(){
+							console.log(this.$refs.cc1.msg)
+						}
+					},
+					components:{
+						'child-comp1':{
+							template:'#child1',
+							data:function(){
+								return {
+									msg:'child1'
+								}
+							}
+						},
+						'child-comp2':{
+							template:'#child2',
+							data:function(){
+								return {
+									msg:'child2'
+								}
+							},
+							props:['myName','myAge']
+						}
+					}
+				}
+			}
+		})
+	</script>
+</html>

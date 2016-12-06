@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>自定义事件</title>
+	</head>
+	<body>
+		<div id="app">
+			父组件
+			<button @click='parentClick'>点击向下传播broadcast</button>
+			<br>
+			子组件一：
+			<children1></children1>
+			<br>
+			子组件二：
+			<anthoerchild></anthoerchild>
+		</div>
+	</body>
+	<script src='../vue.js'></script>
+	<script>
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				val:1
+			},
+			methods:{
+				parentClick:function(){
+					this.$emit('parentClick1')
+					
+				}
+			},
+			events:{
+				childrenClick:function(){
+					console.log('parentClick-parent');
+					return true;
+				},
+				parentClick1:function(){
+					console.log('parentClick-self')
+					this.$broadcast('parentClick1','abc');
+				}
+			},
+			components:{
+				children1:{
+					props:['test'],
+					template:"<button>children1</button></br>子组件2：<children2></children2>",
+					events:{
+						childrenClick:function(){
+							console.log('parentClick-Children1')
+							return true
+						},
+						parentClick1:function(msg){
+							console.log('parentClick-Children1');
+							console.log('message '+msg);
+							return true;
+						}
+					},
+					components:{
+						children2:{
+							props:['test'],
+							template:"<button @click='findParent'>children-Click</button>",
+							methods:{
+								findParent:function(){
+									this.$dispatch('childrenClick')
+								}
+							},
+							events:{
+								childrenClick:function(){
+									console.log('childrenClick-children2');
+								},
+								parentClick1:function(msg){
+									console.log('parentClick-children2');
+									console.log('message '+msg);
+								}
+							}
+						}
+					}
+				},
+				anthoerchild:{
+					props: ['test'],
+					template: "<button>anotherChildren1</button></br>另一个子组件2：<another-children2></another-children2>",
+					events:{
+						childrenClick: function () { 
+							console.log("childrenClick-anotherChildren1"); 
+							return true;
+						},
+						parentClick:function(){
+							console.log("parentClick-anotherChildren1"); 
+							console.log("message:" + msg); 
+							return true; 
+						}
+					},
+					components:{
+						anotherChildren2:{
+							anotherChildren2: { 
+								props: ['test'], 
+								template: "<button @click='findParent'>anotherChildren2-Click</button>", 
+								methods:{
+									findParent: function () { 
+										this.$dispatch('childrenClick'); 
+									} 
+								},
+								events:{
+									childrenClick: function () { 
+										console.log("childrenClick-anotherChildren2"); 
+									}, 
+									parentClick: function (msg) { 
+										console.log("parentClick-anotherChildren2"); 
+										console.log("message:" + msg); 
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		})
+	</script>
+	<!-- 
+		1.事件需要放置在events属性中，而不是放置在methods属性中，只能触发events属性中的事件，而methods中的事件是无法触发的
+		2.向上派发$dispatch和向下广播$broadcast有触发自身同名所区别：向上派发会触发自身同名事件，而向下广播不会，dispatch先触发自身事件
+		3.$dispatch和$broadcast默认只会触发直系，子或者父不包括祖先和孙，的事件，除非事件返回值为true，才会继续在这一条线上继续
+		4.事件不能显式的通过this.事件名 来调用它
+	 -->
+</html>
